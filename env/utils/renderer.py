@@ -51,3 +51,34 @@ class Colored:
         #  Transpose to get channels as last
         _img_zoomed = np.transpose(_img_zoomed, [1, 2, 0])
         return _img_zoomed
+
+
+class Renderer:
+    """
+    Handles the renderer for the environment
+    Receive a map from gridworld and transform it into a visible image (applies colors and zoom)
+    """
+    def __init__(self, size, zoom_factor):
+        self.rgb = Colored(size, zoom_factor)
+        self.viewer = None
+
+    def render(self, state, close, mode='human'):
+        if close:
+            if self.viewer is not None:
+                self.viewer.close()
+                self.viewer = None
+            return
+        img = self.rgb.get_image(state)
+        if mode == 'human':
+            from gym.envs.classic_control import rendering
+            if self.viewer is None:
+                self.viewer = rendering.SimpleImageViewer()
+            self.viewer.imshow(img)
+            return self.viewer.isopen
+        elif mode == 'rgb_array':
+            return img
+
+    def close(self):
+        if self.viewer is not None:
+            self.viewer.close()
+            self.viewer = None
