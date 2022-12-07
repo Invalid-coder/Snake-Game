@@ -45,8 +45,8 @@ class World(object):
 
     def init_snake(self):
         """
-                Initialize a snake
-                """
+        Initialize a snake
+        """
         if not self.custom:
             # Choose a random position for spawn the Snake
             # Tail should not spawn outside of the box or in the wall
@@ -60,7 +60,7 @@ class World(object):
         return new_snake
 
     def init_food(self):
-       """
+        """
         Initialize a piece of food
         """
         snake = self.snake if self.snake.alive else None
