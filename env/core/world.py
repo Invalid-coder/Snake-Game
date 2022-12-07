@@ -60,10 +60,28 @@ class World(object):
         return new_snake
 
     def init_food(self):
-        """
+       """
         Initialize a piece of food
         """
-        pass
+        snake = self.snake if self.snake.alive else None
+        # Update available positions for food placement considering snake location
+        # Food should not be spawned in the Snake
+        self.current_available_food_positions = self.available_food_positions.difference(set(self.snake.blocks))
+        if not self.custom:
+            # Choose a random position from available now
+            chosen_position = random.choice(tuple(self.current_available_food_positions))
+        else:
+            chosen_position = self.food_position
+            try:
+                self.current_available_food_positions.remove(chosen_position)
+            except:
+                if (self.food_position[0] - 1, self.food_position[1]) in self.current_available_food_positions:
+                    chosen_position = (self.food_position[0] - 1, self.food_position[1])
+                else:
+                    chosen_position = (self.food_position[0] - 1, self.food_position[1] + 1)
+                self.current_available_food_positions.remove(chosen_position)
+        self.world[chosen_position[0], chosen_position[1]] = self.FOOD
+        self.food_position = chosen_position
 
     def get_observation(self):
         """
