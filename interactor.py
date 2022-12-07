@@ -29,11 +29,11 @@ def interact():
         if motion == MOTION_UP:
             action = 0
         elif motion == MOTION_DOWN:
-            action = 1
-        elif motion == MOTION_LEFT:
             action = 2
-        elif motion == MOTION_RIGHT:
+        elif motion == MOTION_LEFT:
             action = 3
+        elif motion == MOTION_RIGHT:
+            action = 1
 
     while not done:
         time.sleep(delay_time)
