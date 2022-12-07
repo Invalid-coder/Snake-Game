@@ -65,4 +65,36 @@ class World(object):
         """
         Action executing
         """
-        pass
+        # define reward variable
+        reward = 0
+        # food needed flag
+        new_food_needed = False
+        # check if snake is alive
+        if self.snake.alive:
+            # perform a step (from Snake class)
+            new_snake_head, old_snake_tail = self.snake.step(action)
+            # Check if snake is outside bounds
+            if new_snake_head[0] % (self.size[0] - 1) == 0 or new_snake_head[1] % (self.size[1] - 1) == 0:
+                self.snake.alive = False
+            # Check if snake eats itself
+            elif new_snake_head in self.snake.blocks[1:]:
+                self.snake.alive = False
+            #  Check if snake eats the food
+            if new_snake_head == self.food_position:
+                self.world[new_snake_head[0], new_snake_head[1]] = 0
+
+                self.snake.blocks.append(old_snake_tail)
+
+                # Request to place new food
+                new_food_needed = True
+                reward = self.EAT_REWARD
+            elif self.snake.alive:
+                # Didn't eat anything, move reward
+                reward = self.MOVE_REWARD
+        # Compute done flag and assign dead reward
+        done = not self.snake.alive
+        reward = reward if self.snake.alive else self.DEAD_REWARD
+        # Adding new food
+        if new_food_needed:
+            self.init_food()
+        return reward, done, self.snake.blocks
