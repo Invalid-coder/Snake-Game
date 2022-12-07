@@ -69,7 +69,15 @@ class World(object):
         """
         Get observation of current world state
         """
-        pass
+        obs = self.world.copy()
+        snake = self.snake if self.snake.alive else None
+        # Here we are placing Snake on the World grid with SNAKE_BLOCKs
+        if snake:
+            for block in snake.blocks:
+                obs[block[0], block[1]] = snake.snake_block
+                # snakes head
+            obs[snake.blocks[0][0], snake.blocks[0][1]] = snake.snake_block + 1
+        return obs
 
     def move_snake(self, action):
         """
