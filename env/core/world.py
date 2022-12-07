@@ -45,9 +45,19 @@ class World(object):
 
     def init_snake(self):
         """
-        Initialize a snake
-        """
-        pass
+                Initialize a snake
+                """
+        if not self.custom:
+            # Choose a random position for spawn the Snake
+            # Tail should not spawn outside of the box or in the wall
+            # Remember, coordinates is a tuple(X, Y)
+            start_position = (random.randrange(2, self.size[0] - 2), random.randrange(2, self.size[1] - 2))
+            # Choose a random direction index
+            start_direction_index = random.randrange(0, len(DIRECTIONS))
+            new_snake = Snake(start_position, start_direction_index, SNAKE_SIZE)
+        else:
+            new_snake = Snake(self.start_position, self.start_direction_index, SNAKE_SIZE)
+        return new_snake
 
     def init_food(self):
         """
