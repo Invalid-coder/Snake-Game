@@ -14,7 +14,34 @@ class World(object):
         @param start_direction_index: int
         @param food_position: tuple
         """
-        pass
+        # for custom init
+        self.custom = custom
+        self.start_position = start_position
+        self.start_direction_index = start_direction_index
+        self.food_position = food_position
+        self.current_available_food_positions = None
+        # rewards
+        self.DEAD_REWARD = DEAD_REWARD
+        self.MOVE_REWARD = MOVE_REWARD
+        self.EAT_REWARD = EAT_REWARD
+        self.FOOD = FOOD_BLOCK
+        self.WALL = WALL
+        self.DIRECTIONS = DIRECTIONS
+        # Init a numpy ndarray with zeros of predefined size - that will be the initial World
+        self.size = size
+        self.world = np.zeros(size)
+        # Fill in the indexes gaps to add walls along the World's boundaries
+        self.world[0,:] = self.WALL
+        self.world[-1,:] = self.WALL
+        self.world[:, 0] = self.WALL
+        self.world[:, -1] = self.WALL
+        # Get available positions for placing food
+        # Food should not to be spawned in the Walls
+        self.available_food_positions = set(zip(*np.where(self.world == 0)))
+        # Init snake
+        self.snake = self.init_snake()
+        # Set food
+        self.init_food()
 
     def init_snake(self):
         """
